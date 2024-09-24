@@ -1,4 +1,5 @@
 # 2023-07-14 RW
+# 2024-09-20 RW add historical data
 # direct access to free available climate data from DWD Germany
 # https://opendata.dwd.de/
 
@@ -18,6 +19,8 @@ if (!dir.exists(data_dir)) {dir.create(data_dir)}
 
 link1 <- "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/recent/10minutenwerte_SOLAR_04271_akt.zip"
 
+link2 <- "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/historical/10minutenwerte_SOLAR_04271_20200101_20231231_hist.zip"
+
 get_link1 <- GET(link1)
 
 # save a spare copy and extract the data file needed
@@ -32,11 +35,38 @@ if(status_code(get_link1)==200) {
   
   print(tmp3)
   
-  W1 <- as.data.table(read.csv2(unz(tmp1,tmp3), stringsAsFactors = FALSE))
+  W1b <- as.data.table(read.csv2(unz(tmp1,tmp3), stringsAsFactors = FALSE))
   unlink(tmp1)
 }
 
-W1
+W1b
+
+# historical data
+get_link2 <- GET(link2)
+
+# save a spare copy and extract the data file needed
+if(status_code(get_link2)==200) {
+  
+  tmp1 = tempfile()
+  writeBin(content(get_link2), tmp1)
+  writeBin(content(get_link2), file.path(data_dir,paste("dwd_historical",today,".zip", sep="")))
+  
+  tmplist <- unzip(tmp1, list=TRUE)
+  tmp3 <- grep("produkt_zehn_min_sd",tmplist$Name, value=TRUE)
+  
+  print(tmp3)
+  
+  W1a <- as.data.table(read.csv2(unz(tmp1,tmp3), stringsAsFactors = FALSE))
+  unlink(tmp1)
+}
+
+W1a
+# combine both tables
+W1ab <- rbind(W1a,W1b)
+table(duplicated(W1ab))
+
+W1 <- unique(W1ab)
+table(duplicated(W1))
 
 # end of interval in UTC and use it as the key variable
 W1[, date2 := ymd_hm(MESS_DATUM, tz="UTC")]

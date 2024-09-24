@@ -16,7 +16,7 @@ data_dir <- file.path("..","..", "data")
 if (!dir.exists(data_dir)) {dir.create(data_dir)}
 
 
-data_file_name <- "power_consumption_MPIDR_2020_2022.csv"
+data_file_name <- "power_consumption_MPIDR_2020_2023.csv"
 
 power2 <- get_file_by_name(
   filename = data_file_name,

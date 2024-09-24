@@ -111,7 +111,7 @@ g2 <- g1 + geom_line() + geom_line(data = cpBT$cpF, aes(x=time3, y=pmean, col="S
                    date_minor_breaks="1 month", 
                    labels=date_format("%Y-%m-%d", tz="Etc/GMT-1")) + 
   scale_y_continuous("power consumption in kW") +
-  theme(legend.justification=c(0,1), legend.position=c(0.05,0.9), legend.direction = "horizontal", 
+  theme(legend.justification=c(0,1), legend.position = "inside", legend.position.inside =c(0.05,0.9), legend.direction = "horizontal", 
         plot.background = element_rect(fill = "transparent", colour = NA))
 g2
 

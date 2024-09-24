@@ -56,7 +56,7 @@ setkey(power75up, date3)
 # prepare the histogram
 
 
-h1 <- ggplot(power1[data_source=="UPS_A1" & !is.na(ups_out_sum) & year_month!="2023-07"],
+h1 <- ggplot(power1[data_source=="UPS_A1" & !is.na(ups_out_sum) & year_month!="2024-09"],
              aes(x=ups_out_sum, group=year_month, color=as.factor(year_month)))
 h2 <- h1 + geom_histogram(binwidth=0.025) + scale_y_log10() + 
   xlab("total ups power output in kW") + facet_wrap( ~year_month) +
